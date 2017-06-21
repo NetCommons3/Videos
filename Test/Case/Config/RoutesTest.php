@@ -48,21 +48,21 @@ class RoutesTest extends NetCommonsRoutesTestCase {
 				'url' => '/videos/videos/view/1/content_key',
 				'expected' => array(
 					'plugin' => 'videos', 'controller' => 'videos', 'action' => 'view',
-					'block_id' => '1', 'key' => 'content_key', 'pagePermalink' => Array()
+					'block_id' => '1', 'key' => 'content_key', //'pagePermalink' => Array()
 				)
 			),
 			array(
 				'url' => '/videos/videos/file/1/content_key',
 				'expected' => array(
 					'plugin' => 'videos', 'controller' => 'videos', 'action' => 'file',
-					'block_id' => '1', 'key' => 'content_key', 'pagePermalink' => Array()
+					'block_id' => '1', 'key' => 'content_key', //'pagePermalink' => Array()
 				)
 			),
 			array(
 				'url' => '/videos/videos/download/1/content_key',
 				'expected' => array(
 					'plugin' => 'videos', 'controller' => 'videos', 'action' => 'download',
-					'block_id' => '1', 'key' => 'content_key', 'pagePermalink' => Array()
+					'block_id' => '1', 'key' => 'content_key', //'pagePermalink' => Array()
 				)
 			),
 		);
