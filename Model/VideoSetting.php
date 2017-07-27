@@ -269,9 +269,7 @@ class VideoSetting extends VideosAppModel {
 
 		try {
 			// VideoSetting削除
-			if (! $this->deleteAll(array($this->alias . '.block_key' => $blockKey), false)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
+			$this->__deleteAll($this, 'block_key', $blockKey);
 
 			// 動画とサムネイルのデータと物理ファイル削除
 			foreach ($uploadFiles as $uploadFile) {
@@ -281,30 +279,15 @@ class VideoSetting extends VideosAppModel {
 				}
 			}
 
-			// 動画チャンネル（コンテンツ0件）削除時、$contentKeysが空になるため対応
-			if (! empty($contentKeys)) {
-				// アップロードファイル 削除
-				$conditions = array($this->UploadFile->alias . '.content_key' => $contentKeys);
-				if (! $this->UploadFile->deleteAll($conditions, false)) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				}
-			}
+			// アップロードファイル 削除
+			$this->__deleteAll($this->UploadFile, 'content_key', $contentKeys);
 
-			if (! empty($tagIds)) {
-				// タグコンテンツ 削除
-				$conditions = array($this->TagsContent->alias . '.tag_id' => $tagIds);
-				if (! $this->TagsContent->deleteAll($conditions, false)) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				}
-			}
+			// タグコンテンツ 削除
+			$this->__deleteAll($this->TagsContent, 'tag_id', $tagIds);
 
-			if (! empty($likeIds)) {
-				// いいねユーザー 削除
-				$conditions = array($this->LikesUser->alias . '.like_id' => $likeIds);
-				if (! $this->LikesUser->deleteAll($conditions, false)) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				}
-			}
+			// いいねユーザー 削除
+			$this->__deleteAll($this->LikesUser, 'like_id', $likeIds);
+
 
 			//Blockデータ削除
 			/** @see BlockBehavior::deleteBlock() */
@@ -354,5 +337,25 @@ class VideoSetting extends VideosAppModel {
 		));
 		$contentKeys = array_values($contentKeys);
 		return $contentKeys;
+	}
+
+/**
+ * 全削除
+ *
+ * @param Model $model モデル
+ * @param string $filed フィールド名
+ * @param string $value 値
+ * @return void
+ * @throws InternalErrorException
+ */
+	private function __deleteAll(Model $model, $filed, $value) {
+		if (empty($value)) {
+			return;
+		}
+
+		$conditions = array($model->alias . '.' . $filed => $value);
+		if (! $model->deleteAll($conditions, false)) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		}
 	}
 }
