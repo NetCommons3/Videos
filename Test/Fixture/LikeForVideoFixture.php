@@ -1,6 +1,6 @@
 <?php
 /**
- * LikeFixture
+ * LikeForVideoFixture
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -11,9 +11,19 @@
  */
 
 /**
- * Summary for LikeFixture
+ * LikeForVideoFixture
+ *
+ * @author Mitsuru Mutaguchi <mutaguchi@opensource-workshop.jp>
+ * @package NetCommons\Videos\Test\Fixture
  */
-class LikeFixture extends CakeTestFixture {
+class LikeForVideoFixture extends CakeTestFixture {
+
+/**
+ * Model name
+ *
+ * @var string
+ */
+	public $name = 'Like';
 
 /**
  * Fields
