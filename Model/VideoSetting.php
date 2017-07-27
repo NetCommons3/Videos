@@ -281,22 +281,29 @@ class VideoSetting extends VideosAppModel {
 				}
 			}
 
-			// アップロードファイル 削除
-			$conditions = array($this->UploadFile->alias . '.content_key' => $contentKeys);
-			if (! $this->UploadFile->deleteAll($conditions, false)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			// 動画チャンネル（コンテンツ0件）削除時、$contentKeysが空になるため対応
+			if (! empty($contentKeys)) {
+				// アップロードファイル 削除
+				$conditions = array($this->UploadFile->alias . '.content_key' => $contentKeys);
+				if (! $this->UploadFile->deleteAll($conditions, false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
 			}
 
-			// タグコンテンツ 削除
-			$conditions = array($this->TagsContent->alias . '.tag_id' => $tagIds);
-			if (! $this->TagsContent->deleteAll($conditions, false)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			if (! empty($tagIds)) {
+				// タグコンテンツ 削除
+				$conditions = array($this->TagsContent->alias . '.tag_id' => $tagIds);
+				if (! $this->TagsContent->deleteAll($conditions, false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
 			}
 
-			// いいねユーザー 削除
-			$conditions = array($this->LikesUser->alias . '.like_id' => $likeIds);
-			if (! $this->LikesUser->deleteAll($conditions, false)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			if (! empty($likeIds)) {
+				// いいねユーザー 削除
+				$conditions = array($this->LikesUser->alias . '.like_id' => $likeIds);
+				if (! $this->LikesUser->deleteAll($conditions, false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
 			}
 
 			//Blockデータ削除

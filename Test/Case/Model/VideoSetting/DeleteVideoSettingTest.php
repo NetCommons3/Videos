@@ -31,7 +31,7 @@ class VideoSettingDeleteVideoSettingTest extends NetCommonsDeleteTest {
 		'plugin.videos.video_frame_setting',
 		'plugin.videos.video_setting',
 		'plugin.videos.block_setting_for_video',
-		'plugin.likes.like',
+		'plugin.videos.like',
 		'plugin.likes.likes_user',
 		'plugin.tags.tag',
 		'plugin.tags.tags_content',
