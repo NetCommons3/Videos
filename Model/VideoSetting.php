@@ -288,7 +288,6 @@ class VideoSetting extends VideosAppModel {
 			// いいねユーザー 削除
 			$this->__deleteAll($this->LikesUser, 'like_id', $likeIds);
 
-
 			//Blockデータ削除
 			/** @see BlockBehavior::deleteBlock() */
 			$this->deleteBlock($blockKey);
