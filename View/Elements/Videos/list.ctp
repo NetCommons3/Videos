@@ -29,6 +29,7 @@ if (!isset($style)) {
 					<a href="<?php echo $this->NetCommonsHtml->url(array('action' => 'view', 'key' => $video['Video']['key'])); ?>">
 						<?php echo $this->NetCommonsHtml->image(
 							[
+								'controller' => 'video_files',
 								'action' => 'file',
 								'key' => $video['Video']['key'],
 								Video::THUMBNAIL_FIELD,
