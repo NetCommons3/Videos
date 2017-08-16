@@ -43,15 +43,17 @@ echo $this->NetCommonsHtml->script(array(
 	<?php /* 動画プレイヤー */ ?>
 	<?php echo $this->element('Videos/player', array(
 		'fileMp4Url' => [
+			'controller' => 'video_files',
 			'action' => 'file',
 			'key' => $video['Video']['key'],
 			Video::VIDEO_FILE_FIELD,
 		],
 		'fileThumbnailUrl' => [
+			'controller' => 'video_files',
 			'action' => 'file',
 			'key' => $video['Video']['key'],
 			Video::THUMBNAIL_FIELD,
-			'big',
+			//'big',
 		],
 		'isAutoPlay' => $videoSetting['auto_play'],
 	)); ?>

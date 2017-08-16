@@ -1,6 +1,6 @@
 <?php
 /**
- * VideosController::file()のテスト
+ * VideoFilesController::file()のテスト
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Mitsuru Mutaguchi <mutaguchi@opensource-workshop.jp>
@@ -12,12 +12,12 @@
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 
 /**
- * VideosController::file()のテスト
+ * VideoFilesController::file()のテスト
  *
  * @author Mitsuru Mutaguchi <mutaguchi@opensource-workshop.jp>
- * @package NetCommons\Videos\Test\Case\Controller\VideosController
+ * @package NetCommons\Videos\Test\Case\Controller\VideoFilesController
  */
-class VideosControllerFileTest extends NetCommonsControllerTestCase {
+class VideoFilesControllerFileTest extends NetCommonsControllerTestCase {
 
 /**
  * Fixtures
@@ -48,7 +48,7 @@ class VideosControllerFileTest extends NetCommonsControllerTestCase {
  *
  * @var string
  */
-	protected $_controller = 'videos';
+	protected $_controller = 'video_files';
 
 /**
  * setUp method
@@ -101,7 +101,7 @@ class VideosControllerFileTest extends NetCommonsControllerTestCase {
  */
 	public function testFileGet() {
 		$this->generate(
-			'Videos.Videos', [
+			'Videos.VideoFiles', [
 				'components' => [
 					'Download'
 				]

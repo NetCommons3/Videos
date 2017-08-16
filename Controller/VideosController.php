@@ -269,33 +269,6 @@ class VideosController extends VideosAppController {
 	}
 
 /**
- * サムネイル、動画の表示
- *
- * @return CakeResponse
- * @throws NotFoundException 表示できない記事へのアクセス
- */
-	public function file() {
-		// ここから元コンテンツを取得する処理
-		$key = $this->params['key'];
-		$conditions = $this->Video->getConditions();
-
-		$conditions['Video.key'] = $key;
-		$query = array(
-			'conditions' => $conditions,
-		);
-		$video = $this->Video->find('first', $query);
-		// ここまで元コンテンツを取得する処理
-
-		// ダウンロード実行
-		if ($video) {
-			return $this->Download->doDownload($video['Video']['id']);
-		} else {
-			// 表示できない記事へのアクセスなら404
-			throw new NotFoundException(__d('videos', 'Invalid video entry'));
-		}
-	}
-
-/**
  * 動画のzipダウンロード
  *
  * @return CakeResponse
