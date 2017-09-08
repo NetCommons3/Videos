@@ -192,7 +192,7 @@ class VideoBehavior extends ModelBehavior {
 		// 変換エラー時
 		if ($retImage != 0) {
 			$this->log('[' . __METHOD__ . '] ' . __FILE__ . ' (line ' . __LINE__ .
-				') ffmpeg thumbnail generat error', LOG_DEBUG);
+				') ffmpeg thumbnail generate error', LOG_DEBUG);
 			$this->log([$strCmd, $arrImage, $retImage], LOG_DEBUG);
 			// return はしない
 		} else {
