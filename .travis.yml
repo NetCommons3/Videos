@@ -23,7 +23,7 @@ addons:
   apt:
     packages:
     - libav-tools
-    - libavcodec-extra-53
+    - libavcodec-extra
 
 before_script:
   - export NETCOMMONS_BUILD_DIR=`dirname $TRAVIS_BUILD_DIR`/NetCommons3
