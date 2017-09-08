@@ -137,6 +137,9 @@ class Video extends VideosAppModel {
 				'path' => '/:plugin_key/:plugin_key/view/:block_id/:content_key',
 			),
 		),
+		'Wysiwyg.Wysiwyg' => array(
+			'fields' => array('description'),
+		),
 		//多言語
 		'M17n.M17n' => array(
 			'commonFields' => array('category_id', 'title_icon'),

@@ -13,9 +13,11 @@ $this->NetCommonsHtml->script(array(
 	'/tags/js/tags.js',
 	'/videos/js/videos.js',
 ));
+
+$video = NetCommonsAppController::camelizeKeyRecursive(array('video' => $this->data['Video']));
 ?>
 
-<article>
+<article ng-controller="VideoEdit" ng-init="initialize(<?php echo h(json_encode($video)); ?>)">
 	<?php /* ブロック名表示 */ ?>
 	<?php echo $this->NetCommonsHtml->blockTitle(Current::read('BlocksLanguage.name')); ?>
 
@@ -62,10 +64,9 @@ $this->NetCommonsHtml->script(array(
 					)); ?>
 				<?php endif; ?>
 
-				<?php echo $this->NetCommonsForm->input('Video.description', array(
-					'type' => 'textarea',
+				<?php echo $this->NetCommonsForm->wysiwyg('Video.description', array(
 					'label' => __d('videos', 'Description'),
-					'rows' => 5,
+					'rows' => 5
 				)); ?>
 
 				<?php /** @see CategoryHelper::select() */ ?>

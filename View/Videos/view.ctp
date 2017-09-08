@@ -88,7 +88,7 @@ echo $this->NetCommonsHtml->script(array(
 		</div>
 		<div class="video-description">
 			<?php /* 説明 */ ?>
-			<?php echo nl2br(h($video['Video']['description'])); ?>
+			<?php echo $video['Video']['description']; ?>
 		</div>
 		<div class="video-detail-links-row">
 			<?php /* ブロック編集許可OK（編集長以上）ならダウンロードできる */ ?>

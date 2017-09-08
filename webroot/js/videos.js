@@ -46,3 +46,29 @@ NetCommonsApp.controller('RelatedVideos',
         $('button.related-video-more').hide(0);
       };
     }]);
+
+/**
+ * 動画編集 Javascript
+ *
+ * @param {string} Controller name
+ * @param {function($scope, NetCommonsWysiwyg)} Controller
+ */
+NetCommonsApp.controller('VideoEdit',
+    ['$scope', 'NetCommonsWysiwyg', function($scope, NetCommonsWysiwyg) {
+
+        /**
+         * tinymce
+         *
+         * @type {object}
+         */
+        $scope.tinymce = NetCommonsWysiwyg.new();
+
+        /**
+         * Initialize
+         *
+         * @return {void}
+         */
+        $scope.initialize = function(data) {
+            $scope.video = angular.copy(data.video);
+        };
+    }]);
