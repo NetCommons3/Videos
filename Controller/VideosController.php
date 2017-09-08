@@ -119,7 +119,7 @@ class VideosController extends VideosAppController {
 		}
 
 		// ゲストアクセスOKのアクションを設定
-		$this->Auth->allow('tag', 'file', 'embed');
+		$this->Auth->allow('tag', 'embed');
 
 		// FFMPEG有効フラグ
 		$this->set('isFfmpegEnable', $this->Video->isFfmpegEnable());
