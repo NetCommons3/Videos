@@ -1,0 +1,13 @@
+
+//////////////////////////////////
+// Test Results
+//   [/var/www/app]
+//////////////////////////////////
+
++----------------------------+
+  Videos
+     phpcs   : Success
+     phpmd   : Success
+    phpcpd   : Success
+    gjslint  : Failure
+    phpdoc   : Success

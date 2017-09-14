@@ -50,6 +50,7 @@ class ModDescriptionNl2br extends NetCommonsMigration {
  *
  * @param string $direction Direction of migration process (up or down)
  * @return bool Should process continue
+ * @throws InternalErrorException
  */
 	public function after($direction) {
 		$this->loadModels([
