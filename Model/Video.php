@@ -86,7 +86,7 @@ class Video extends VideosAppModel {
  *
  * @var string ffmpeg オプション
  */
-	const FFMPEG_OPTION = '-ar 48000 -vcodec libx264 -r 30 -b 500k -strict -2';
+	const FFMPEG_OPTION = '-ar 48000 -vcodec libx264 -pix_fmt yuv420p -r 30 -b 500k -strict -2';
 
 /**
  * ffmpeg サムネイル オプション
