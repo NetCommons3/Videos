@@ -47,6 +47,7 @@ NetCommonsApp.controller('RelatedVideos',
       };
     }]);
 
+
 /**
  * 動画編集 Javascript
  *
@@ -56,19 +57,19 @@ NetCommonsApp.controller('RelatedVideos',
 NetCommonsApp.controller('VideoEdit',
     ['$scope', 'NetCommonsWysiwyg', function($scope, NetCommonsWysiwyg) {
 
-        /**
-         * tinymce
-         *
-         * @type {object}
-         */
-        $scope.tinymce = NetCommonsWysiwyg.new();
+       /**
+        * tinymce
+        *
+        * @type {object}
+        */
+       $scope.tinymce = NetCommonsWysiwyg.new();
 
-        /**
-         * Initialize
-         *
-         * @return {void}
-         */
-        $scope.initialize = function(data) {
-            $scope.video = angular.copy(data.video);
-        };
+       /**
+        * Initialize
+        *
+        * @return {void}
+        */
+       $scope.initialize = function(data) {
+         $scope.video = angular.copy(data.video);
+       };
     }]);
