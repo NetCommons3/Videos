@@ -66,6 +66,9 @@ class ModDescriptionNl2br extends NetCommonsMigration {
 			),
 			'recursive' => -1
 		));
+		if (empty($videos)) {
+			return true;
+		}
 
 		foreach ($videos as &$video) {
 			if ($direction === 'down') {
