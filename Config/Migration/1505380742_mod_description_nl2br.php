@@ -53,11 +53,14 @@ class ModDescriptionNl2br extends NetCommonsMigration {
  * @throws InternalErrorException
  */
 	public function after($direction) {
-		$this->loadModels([
-			'Video' => 'Videos.Video',
-		]);
+		// 配置プラグインのmodelを$this->loadModels()で取得するとNetCommonsAppModel::__construct()により slave1に切り替わるため、
+		// マイグレーションでは $this->generateModel()を使う
+		//		$this->loadModels([
+		//			'Video' => 'Videos.Video',
+		//		]);
+		$Video = $this->generateModel('Video');
 
-		$videos = $this->Video->find('all', array(
+		$videos = $Video->find('all', array(
 			'fields' => array('Video.id', 'Video.description'),
 			'conditions' => array(
 				"NOT" => array(
@@ -79,19 +82,19 @@ class ModDescriptionNl2br extends NetCommonsMigration {
 		}
 
 		//トランザクションBegin
-		$this->Video->begin();
+		$Video->begin();
 
 		try {
-			if (! $this->Video->saveMany($videos, ['validate' => false, 'callbacks' => false])) {
+			if (! $Video->saveMany($videos, ['validate' => false, 'callbacks' => false])) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
 			//トランザクションCommit
-			$this->Video->commit();
+			$Video->commit();
 
 		} catch (Exception $ex) {
 			//トランザクションRollback
-			$this->Video->rollback($ex);
+			$Video->rollback($ex);
 		}
 
 		return true;
