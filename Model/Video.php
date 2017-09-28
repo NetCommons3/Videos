@@ -56,20 +56,9 @@ class Video extends VideosAppModel {
 /**
  * ffmpeg パス
  *
- * #### サンプルコード
- * ```php
- * 	// for CentOS, Ubuntu 12.04LTS
- *	const FFMPEG_PATH = '/usr/bin/ffmpeg';
- * 	// for Ubuntu
- *	const FFMPEG_PATH = '/usr/bin/avconv';
- * 	// for build
- * 	// ほぼ全自動ビルド http://www.jifu-labo.net/2015/09/ffmpeg_build/
- *	const FFMPEG_PATH = '/usr/local/ffmpeg_build/bin/ffmpeg';
- * ```
- *
  * @var string ffmpeg パス
  */
-	const FFMPEG_PATH = '/usr/bin/ffmpeg';
+	const FFMPEG_PATH = '/usr/bin/ffmpeg,/usr/bin/avconv';
 
 /**
  * ffmpeg オプション
@@ -239,19 +228,24 @@ class Video extends VideosAppModel {
 		if (isset($this->isFfmpegEnable)) {
 			return $this->isFfmpegEnable;
 		}
+		$ffmpegPaths = explode(',', Video::FFMPEG_PATH);
+		foreach ($ffmpegPaths as $ffmpegPath) {
+			// windows対策
+			//$strCmd = 'which ' . $ffmpegPath . ' 2>&1';
+			$strCmd = $ffmpegPath . ' -version 2>&1';
+			exec($strCmd, $arr);
 
-		// windows対策
-		//$strCmd = 'which ' . self::FFMPEG_PATH . ' 2>&1';
-		$strCmd = self::FFMPEG_PATH . ' -version 2>&1';
-		exec($strCmd, $arr);
-
-		$arr0 = Hash::get($arr, 0);
-		if (strpos($arr0, 'ffmpeg version') !== false) {
-			// コマンドあり
-			$this->isFfmpegEnable = true;
-		} else {
-			// コマンドなし
-			$this->isFfmpegEnable = false;
+			$arr0 = Hash::get($arr, 0);
+			if (strpos($arr0, 'ffmpeg version') !== false ||
+				strpos($arr0, 'avconv version') !== false) {
+				// コマンドあり
+				$this->isFfmpegEnable = true;
+				$this->setVideoSettings([VideoBehavior::SETTING_FFMPEG_PATH => $ffmpegPath]);
+				break;
+			} else {
+				// コマンドなし
+				$this->isFfmpegEnable = false;
+			}
 		}
 
 		return $this->isFfmpegEnable;
