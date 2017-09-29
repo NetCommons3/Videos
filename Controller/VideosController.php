@@ -122,6 +122,7 @@ class VideosController extends VideosAppController {
 		$this->Auth->allow('tag', 'embed');
 
 		// FFMPEG有効フラグ
+		/* @see VideoBehavior::isFfmpegEnable() */
 		$this->set('isFfmpegEnable', $this->Video->isFfmpegEnable());
 		// （編集長以上が使える）ダウンロードリンクを使用する
 		$this->set('useDownloadLink', $this->useDownloadLink);

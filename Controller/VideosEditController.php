@@ -73,6 +73,7 @@ class VideosEditController extends VideosAppController {
 		}
 
 		// FFMPEG有効フラグ
+		/* @see VideoBehavior::isFfmpegEnable() */
 		$this->set('isFfmpegEnable', $this->Video->isFfmpegEnable());
 	}
 
