@@ -245,7 +245,7 @@ class VideoValidateTest extends NetCommonsValidateTest {
 		//		}
 		$data = Hash::merge($data, $overwrite);
 
-		$this->$model->isFfmpegEnable = $isFfmpegEnable;
+		$this->$model->setIsFfmpegEnable($isFfmpegEnable);
 
 		//validate処理実行
 		$this->$model->set($data);
