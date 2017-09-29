@@ -54,44 +54,6 @@ class Video extends VideosAppModel {
 	const THUMBNAIL_MIME_TYPE = 'image/jpeg,image/png,image/gif';
 
 /**
- * ffmpeg パス
- *
- * @var string ffmpeg パス
- */
-	const FFMPEG_PATH = '/usr/bin/ffmpeg,/usr/bin/avconv';
-
-/**
- * ffmpeg オプション
- *
- * #### サンプルコード
- * ```php
- * 	// 通常
- *	const FFMPEG_OPTION = '-ar 48000 -vcodec libx264 -r 30 -b 500k -strict -2';
- * 	// for ffmpeg version git-2016-05-13-cb928fc ダウンロードしながら再生対応
- *	const FFMPEG_OPTION = '-ar 48000 -vcodec libx264 -r 30 -b 500k  -strict -2 -movflags faststart';
- * 	// 2016.10.11以前の通常
- *	const FFMPEG_OPTION = '-acodec libmp3lame -ab 128k -ar 44100 -ac 2 -vcodec libx264 -r 30 -b 500k';
- * ```
- *
- * @var string ffmpeg オプション
- */
-	const FFMPEG_OPTION = '-ar 48000 -vcodec libx264 -pix_fmt yuv420p -r 30 -b 500k -strict -2';
-
-/**
- * ffmpeg サムネイル オプション
- *
- * #01 for CentOS, Ubuntu ffmpeg version 0.8.17-4:0.8.17-0ubuntu0.12.04.2
- *
- * @var string ffmpeg サムネイル オプション
- */
-	const FFMPEG_THUMBNAIL_OPTION = '-ss 1 -vframes 1 -f image2';	// #01
-
-/**
- * @var bool ffmpeg 有効フラグ
- */
-	public $isFfmpegEnable = null;
-
-/**
  * use behaviors
  *
  * @var array
@@ -210,45 +172,15 @@ class Video extends VideosAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		/** @see VideoValidationBehavior::setSettingVideo() */
-		$this->setSettingVideo(VideoValidationBehavior::IS_FFMPEG_ENABLE, $this->isFfmpegEnable());
+		/* @see VideoValidationBehavior::setVideoValidationSettings() */
+		/* @see VideoBehavior::isFfmpegEnable() */
+		$this->setVideoValidationSettings(VideoValidationBehavior::IS_FFMPEG_ENABLE,
+			$this->isFfmpegEnable());
 
-		/** @see VideoValidationBehavior::rules() */
+		/* @see VideoValidationBehavior::rules() */
 		$this->validate = $this->rules($options);
 
 		return parent::beforeValidate($options);
-	}
-
-/**
- * FFMPEG有効フラグをセット
- *
- * @return bool
- */
-	public function isFfmpegEnable() {
-		if (isset($this->isFfmpegEnable)) {
-			return $this->isFfmpegEnable;
-		}
-		$ffmpegPaths = explode(',', Video::FFMPEG_PATH);
-		foreach ($ffmpegPaths as $ffmpegPath) {
-			// windows対策
-			//$strCmd = 'which ' . $ffmpegPath . ' 2>&1';
-			$strCmd = $ffmpegPath . ' -version 2>&1';
-			exec($strCmd, $arr);
-
-			$arr0 = Hash::get($arr, 0);
-			if (strpos($arr0, 'ffmpeg version') !== false ||
-				strpos($arr0, 'avconv version') !== false) {
-				// コマンドあり
-				$this->isFfmpegEnable = true;
-				$this->setVideoSettings([VideoBehavior::SETTING_FFMPEG_PATH => $ffmpegPath]);
-				break;
-			} else {
-				// コマンドなし
-				$this->isFfmpegEnable = false;
-			}
-		}
-
-		return $this->isFfmpegEnable;
 	}
 
 /**
@@ -381,7 +313,8 @@ class Video extends VideosAppModel {
 			}
 
 			// Ffmpeg=ON and 動画あり
-			if (self::isFfmpegEnable() &&
+			/* @see VideoBehavior::isFfmpegEnable() */
+			if ($this->isFfmpegEnable() &&
 				isset($data[$this->alias][Video::VIDEO_FILE_FIELD]['size']) &&
 				$data[$this->alias][Video::VIDEO_FILE_FIELD]['size'] !== 0) {
 

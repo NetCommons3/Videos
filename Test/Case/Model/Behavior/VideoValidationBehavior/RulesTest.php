@@ -82,7 +82,7 @@ class VideoValidationBehaviorRulesTest extends NetCommonsModelTestCase {
  */
 	public function testRules($options = array(), $isFfmpegEnable = 0, $checkKey = '') {
 		//テスト実施
-		$this->TestModel->setSettingVideo(VideoValidationBehavior::IS_FFMPEG_ENABLE, $isFfmpegEnable);
+		$this->TestModel->setVideoValidationSettings(VideoValidationBehavior::IS_FFMPEG_ENABLE, $isFfmpegEnable);
 		$result = $this->TestModel->rules($options);
 
 		//チェック

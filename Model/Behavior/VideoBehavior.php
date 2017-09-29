@@ -18,20 +18,57 @@ App::uses('TemporaryFolder', 'Files.Utility');
 class VideoBehavior extends ModelBehavior {
 
 /**
+ * ffmpeg パス複数
+ *
+ * @var string ffmpeg パス複数
+ */
+	const FFMPEG_PATHS = '/usr/bin/ffmpeg,/usr/bin/avconv';
+
+/**
+ * ffmpeg オプション
+ *
+ * #### サンプルコード
+ * ```php
+ * 	// 通常
+ *	const FFMPEG_OPTION = '-ar 48000 -vcodec libx264 -r 30 -b 500k -strict -2';
+ * 	// for ffmpeg version git-2016-05-13-cb928fc ダウンロードしながら再生対応
+ *	const FFMPEG_OPTION = '-ar 48000 -vcodec libx264 -r 30 -b 500k  -strict -2 -movflags faststart';
+ * 	// 2016.10.11以前の通常
+ *	const FFMPEG_OPTION = '-acodec libmp3lame -ab 128k -ar 44100 -ac 2 -vcodec libx264 -r 30 -b 500k';
+ * ```
+ *
+ * @var string ffmpeg オプション
+ */
+	const FFMPEG_OPTION = '-ar 48000 -vcodec libx264 -pix_fmt yuv420p -r 30 -b 500k -strict -2';
+
+/**
+ * ffmpeg サムネイル オプション
+ *
+ * #01 for CentOS, Ubuntu ffmpeg version 0.8.17-4:0.8.17-0ubuntu0.12.04.2
+ *
+ * @var string ffmpeg サムネイル オプション
+ */
+	const FFMPEG_THUMBNAIL_OPTION = '-ss 1 -vframes 1 -f image2';	// #01
+
+/**
+ * @var bool ffmpeg 有効フラグ
+ */
+	public $isFfmpegEnable = null;
+
+/**
+ * ffmpeg パス
+ *
+ * @var string ffmpeg パス
+ *
+ */
+	public $ffmpegPath = null;
+
+/**
  * セッティングの種類(setSettingで利用)
  *
  * @var string ffmpeg パス
  */
 	const SETTING_FFMPEG_PATH = 'ffmpegPath';
-
-/**
- * ビヘイビアの初期設定
- *
- * @var array
- */
-	protected $_defaultSettings = array(
-		self::SETTING_FFMPEG_PATH => null,
-	);
 
 /**
  * setup
@@ -43,22 +80,40 @@ class VideoBehavior extends ModelBehavior {
  */
 	public function setup(Model $model, $settings = array()) {
 		$this->settings[$model->alias] = $settings;
-		$this->settings[$model->alias] =
-			Hash::merge($this->_defaultSettings, $this->settings[$model->alias]);
 
 		$model->UploadFile = ClassRegistry::init('Files.UploadFile', true);
 	}
 
 /**
- * setting追加設定
+ * FFMPEG有効フラグをセット
  *
- * @param Model $model モデル
- * @param array $settings 設定値
- * @return void
+ * @return bool
  */
-	public function setVideoSettings(Model $model, $settings = array()) {
-		$this->settings[$model->alias] =
-			Hash::merge($this->settings[$model->alias], $settings);
+	public function isFfmpegEnable() {
+		if (isset($this->isFfmpegEnable)) {
+			return $this->isFfmpegEnable;
+		}
+		$ffmpegPaths = explode(',', VideoBehavior::FFMPEG_PATHS);
+		foreach ($ffmpegPaths as $ffmpegPath) {
+			// windows対策
+			//$strCmd = 'which ' . $ffmpegPath . ' 2>&1';
+			$strCmd = $ffmpegPath . ' -version 2>&1';
+			exec($strCmd, $arr);
+
+			$arr0 = Hash::get($arr, 0);
+			if (strpos($arr0, 'ffmpeg version') !== false ||
+				strpos($arr0, 'avconv version') !== false) {
+				// コマンドあり
+				$this->isFfmpegEnable = true;
+				$this->ffmpegPath = $ffmpegPath;
+				break;
+			} else {
+				// コマンドなし
+				$this->isFfmpegEnable = false;
+			}
+		}
+
+		return $this->isFfmpegEnable;
 	}
 
 /**
@@ -70,25 +125,20 @@ class VideoBehavior extends ModelBehavior {
  * @throws InternalErrorException
  */
 	public function saveConvertVideo(Model $model, $video) {
-		$ffmpegPath = $this->settings[$model->alias][self::SETTING_FFMPEG_PATH];
-		if (is_null($ffmpegPath)) {
-			return true;
-		}
-
 		// 元動画 取得
 		$noConvert = $model->UploadFile->getFile('videos', $model->id, Video::VIDEO_FILE_FIELD);
 
 		// --- 動画変換
-		$this->__convertVideo($model, $video, $noConvert, $ffmpegPath);
+		$this->__convertVideo($model, $video, $noConvert);
 
 		// 変換後動画 取得
 		$convert = $model->UploadFile->getFile('videos', $model->id, Video::VIDEO_FILE_FIELD);
 
 		// --- サムネイル自動作成
-		$this->__generateThumbnail($model, $video, $convert, $ffmpegPath);
+		$this->__generateThumbnail($model, $video, $convert);
 
 		// --- 再生時間を取得
-		$videoTimeSec = $this->__getVideoTime($model, $convert, $ffmpegPath);
+		$videoTimeSec = $this->__getVideoTime($model, $convert);
 
 		// コールバックoff
 		$validate = array(
@@ -110,11 +160,10 @@ class VideoBehavior extends ModelBehavior {
  * @param Model $model モデル
  * @param array $video Video
  * @param array $noConvert File
- * @param array $ffmpegPath ffmpegパス
  * @return void
  * @throws InternalErrorException
  */
-	private function __convertVideo(Model $model, $video, $noConvert, $ffmpegPath) {
+	private function __convertVideo(Model $model, $video, $noConvert) {
 		// --- 動画変換
 		$noConvertPath = $model->UploadFile->uploadBasePath . $noConvert['UploadFile']['path'] .
 						$noConvert['UploadFile']['id'] . DS;
@@ -131,8 +180,8 @@ class VideoBehavior extends ModelBehavior {
 		// 例）/usr/bin/ffmpeg -y -i '/var/www/app/app/webroot/files/upload_file/real_file_name/1/21/bd14317ad1b299f9074b532116c89da8.MOV' -acodec libmp3lame -ab 128k -ar 44100 -ac 2 -vcodec libx264 -r 30 -b 500k '/var/www/app/app/webroot/files/upload_file/real_file_name/1/21/bd14317ad1b299f9074b532116c89da8.mp4' 2>&1
 		// http://tech.ckme.co.jp/ffmpeg.shtml
 		// http://www.xucker.jpn.org/product/ffmpeg_commands.html
-		$strCmd = $ffmpegPath . ' -y -i ' . escapeshellarg($noConvertPath . $realFileName) .
-			' ' . Video::FFMPEG_OPTION . ' ' . escapeshellarg($convertedFilePath) . ' 2>&1';
+		$strCmd = $this->ffmpegPath . ' -y -i ' . escapeshellarg($noConvertPath . $realFileName) .
+			' ' . VideoBehavior::FFMPEG_OPTION . ' ' . escapeshellarg($convertedFilePath) . ' 2>&1';
 		exec($strCmd, $arr, $ret);
 
 		// 変換エラー時
@@ -156,10 +205,9 @@ class VideoBehavior extends ModelBehavior {
  *
  * @param Model $model モデル
  * @param array $convert 動画変換後ファイルデータ
- * @param array $ffmpegPath ffmpegパス
  * @return mixed int on success, false on error
  */
-	private function __getVideoTime(Model $model, $convert, $ffmpegPath) {
+	private function __getVideoTime(Model $model, $convert) {
 		// 元動画
 		$noConvertPath = $model->UploadFile->uploadBasePath . $convert['UploadFile']['path'] .
 						$convert['UploadFile']['id'] . DS;
@@ -168,7 +216,7 @@ class VideoBehavior extends ModelBehavior {
 
 		// 変換後の動画情報を取得 コマンドインジェクション対策
 		// ffmpeg -i の $retInfo はファイルがあってもなくても1(失敗)なので、エラー時処理は省く
-		$strCmd = $ffmpegPath . " -i " . escapeshellarg($noConvertPath . $videoName .
+		$strCmd = $this->ffmpegPath . " -i " . escapeshellarg($noConvertPath . $videoName .
 				'.mp4') . " 2>&1";
 		exec($strCmd, $arrInfo);
 
@@ -199,10 +247,9 @@ class VideoBehavior extends ModelBehavior {
  * @param Model $model モデル
  * @param array $video Video
  * @param array $convert 動画変換後ファイルデータ
- * @param array $ffmpegPath ffmpegパス
  * @return void
  */
-	private function __generateThumbnail(Model $model, $video, $convert, $ffmpegPath) {
+	private function __generateThumbnail(Model $model, $video, $convert) {
 		// 編集時サムネイルありの場合、自動作成しない
 		$thumbnailSize = Hash::get($video, $model->alias . '.' . Video::THUMBNAIL_FIELD . '.size');
 		if (!empty($thumbnailSize)) {
@@ -221,9 +268,9 @@ class VideoBehavior extends ModelBehavior {
 		// 例) ffmpeg -i /var/www/html/movies/play/20130901_072755.mp4 -ss 1 -vframes 1 -f image2 /var/www/html/movies/play/20130901_072755.jpg
 		// サムネイルは変換後のmp4 から生成する。mts からサムネイルを生成した場合、灰色画像になりうまく生成できなかった。ファイル形式によりサムネイル生成に制限がある可能性があるため。
 		// コマンドインジェクション対策
-		$strCmd = $ffmpegPath . ' -i ' .
+		$strCmd = $this->ffmpegPath . ' -i ' .
 			escapeshellarg($convertPath . $videoName . '.mp4') .
-			' ' . Video::FFMPEG_THUMBNAIL_OPTION . ' ' .
+			' ' . VideoBehavior::FFMPEG_THUMBNAIL_OPTION . ' ' .
 			escapeshellarg($convertedFilePath);
 		exec($strCmd, $arrImage, $retImage);
 

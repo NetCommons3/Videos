@@ -19,7 +19,7 @@ class VideoValidationBehavior extends ModelBehavior {
 /**
  * セッティングの種類(setSettingで利用)
  *
- * @var string 任意で送信するユーザID（グループ送信（回覧板、カレンダー等）、アンケートを想定）
+ * @var string ffmpeg 有効フラグ
  */
 	const IS_FFMPEG_ENABLE = 'isFfmpegEnable';
 
@@ -44,7 +44,7 @@ class VideoValidationBehavior extends ModelBehavior {
  * @return void
  * @see VideoValidationBehavior::IS_FFMPEG_ENABLE
  */
-	public function setSettingVideo(Model $model, $settingKey, $settingValue) {
+	public function setVideoValidationSettings(Model $model, $settingKey, $settingValue) {
 		$this->settings[$model->alias][$settingKey] = $settingValue;
 	}
 
