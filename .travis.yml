@@ -7,7 +7,7 @@ php:
   - 7.0
   - 7.1
 
-sudo: false
+sudo: true
 
 env:
   matrix:
@@ -26,6 +26,7 @@ addons:
     - libavcodec-extra
 
 before_script:
+  - sudo ln -s /usr/bin/avconv /usr/bin/ffmpeg
   - export NETCOMMONS_BUILD_DIR=`dirname $TRAVIS_BUILD_DIR`/NetCommons3
   - git clone git://github.com/NetCommons3/NetCommons3 $NETCOMMONS_BUILD_DIR
   - cd $NETCOMMONS_BUILD_DIR

@@ -55,7 +55,7 @@ class VideoBehaviorSaveConvertVideoTest extends NetCommonsModelTestCase {
 		$this->TestVideoBehaviorModel = ClassRegistry::init('TestVideos.TestVideoBehaviorModel');
 		Current::write('Room.id', '2');
 
-		// これでもFFMPEGのパスをセットできる
+		// これでFFMPEGのパスをセットできる
 		$this->TestVideoBehaviorModel->isFfmpegEnable();
 	}
 

@@ -85,11 +85,23 @@ class VideoBehavior extends ModelBehavior {
 	}
 
 /**
+ * FFMPEG有効フラグを直セット（テスト用）
+ *
+ * @param Model $model モデル
+ * @param bool $isFfmpegEnable ffmpeg有効フラグ
+ * @return void
+ */
+	public function setIsFfmpegEnable(Model $model, $isFfmpegEnable) {
+		$this->isFfmpegEnable = $isFfmpegEnable;
+	}
+
+/**
  * FFMPEG有効フラグをセット
  *
+ * @param Model $model モデル
  * @return bool
  */
-	public function isFfmpegEnable() {
+	public function isFfmpegEnable(Model $model) {
 		if (isset($this->isFfmpegEnable)) {
 			return $this->isFfmpegEnable;
 		}
