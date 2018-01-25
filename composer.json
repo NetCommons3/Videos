@@ -22,7 +22,7 @@
         "netcommons/users":             "@dev",
         "netcommons/workflow":          "@dev"
     },
-    "license": "NON-SPDX (NetCommons License)",
+    "license": "BSD-2-Clause-FreeBSD",
     "authors": [
         {
           "name": "Mitsuru Mutaguchi(OpenSource WorkShop)",
