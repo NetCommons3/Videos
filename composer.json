@@ -22,7 +22,7 @@
         "netcommons/users":             "@dev",
         "netcommons/workflow":          "@dev"
     },
-    "license": "Unlicense",
+    "license": "NetCommons License",
     "authors": [
         {
           "name": "Mitsuru Mutaguchi(OpenSource WorkShop)",
