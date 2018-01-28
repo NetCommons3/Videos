@@ -34,14 +34,7 @@ class VideoCountUpTest extends NetCommonsModelTestCase {
 		'plugin.site_manager.site_setting',
 		'plugin.likes.like',
 		'plugin.likes.likes_user',
-		//'plugin.tags.tag',
-		//'plugin.tags.tags_content',
-		//'plugin.files.upload_file',
-		//'plugin.files.upload_files_content',
-		//'plugin.content_comments.content_comment',
 		'plugin.categories.category',
-		//'plugin.categories.category_order',
-		//'plugin.categories.categories_language',
 	);
 
 /**
