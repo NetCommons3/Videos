@@ -33,7 +33,7 @@ class VideosController extends VideosAppController {
  *
  * @var int
  */
-	const MAX_LIMIT_RELATED_VIDEO = 100;
+	const MAX_LIMIT_RELATED_VIDEO = 10;
 
 /**
  * （編集長以上が使える）ダウンロードリンクを使用する
@@ -227,7 +227,8 @@ class VideosController extends VideosAppController {
 					'Video.id' => $video['Video']['id'],
 				),
 			),
-			'order' => 'Video.id DESC'
+			'order' => 'Video.id DESC',
+			'limit' => self::MAX_LIMIT_RELATED_VIDEO
 		));
 		$this->set('relatedVideos', $relatedVideos);
 
