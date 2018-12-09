@@ -80,7 +80,7 @@ class VideoDeleteVideoTest extends WorkflowDeleteTest {
 		parent::setUp();
 
 		// テスト実ファイル配置
-		$this->_testFilePath = APP . WEBROOT_DIR . DS . 'files/upload_file/test/11/';
+		$this->_testFilePath = UPLOADS_ROOT . 'files/upload_file/test/11/';
 		(new VideoTestUtil())->readyTestFile('Videos', 'video1.mp4', $this->_testFilePath);
 
 		// 総容量取得用のblock_key
@@ -117,6 +117,18 @@ class VideoDeleteVideoTest extends WorkflowDeleteTest {
 		$results[0] = array($data, $association);
 
 		return $results;
+	}
+
+/**
+ * Deleteのテスト
+ *
+ * @param array|string $data 削除データ
+ * @param array $associationModels 削除確認の関連モデル array(model => conditions)
+ * @dataProvider dataProviderDelete
+ * @return void
+ */
+	public function testDelete($data, $associationModels = null) {
+		parent::testDelete($data, $associationModels);
 	}
 
 /**
