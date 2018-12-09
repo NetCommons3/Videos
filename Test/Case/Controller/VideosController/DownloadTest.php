@@ -124,7 +124,7 @@ class VideosControllerDownloadTest extends NetCommonsControllerTestCase {
 		);
 		// テスト実ファイル配置
 		$videoTestUtil = new VideoTestUtil();
-		$testFilePath = APP . WEBROOT_DIR . DS . 'files/upload_file/test/11/';
+		$testFilePath = UPLOADS_ROOT . 'files/upload_file/test/11/';
 		$videoTestUtil->readyTestFile('Videos', 'video1.mp4', $testFilePath);
 
 		//テスト実行

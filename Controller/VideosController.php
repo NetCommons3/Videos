@@ -320,7 +320,7 @@ class VideosController extends VideosAppController {
 		$zipFileName = $fileName . '.zip';
 		$videoFileName = $fileName . '.mp4';
 
-		$realFilePath = APP . WEBROOT_DIR . DS .
+		$realFilePath = UPLOADS_ROOT .
 			$video['UploadFile'][Video::VIDEO_FILE_FIELD]['path'] .
 			$video['UploadFile'][Video::VIDEO_FILE_FIELD]['id'] . DS .
 			$video['UploadFile'][Video::VIDEO_FILE_FIELD]['real_file_name'];

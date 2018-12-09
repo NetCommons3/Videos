@@ -70,7 +70,7 @@ class VideosEditControllerDeleteTest extends WorkflowControllerDeleteTest {
 		parent::setUp();
 
 		// テスト実ファイル配置
-		$this->_testFilePath = APP . WEBROOT_DIR . DS . 'files/upload_file/test/11/';
+		$this->_testFilePath = UPLOADS_ROOT . 'files/upload_file/test/11/';
 		(new VideoTestUtil())->readyTestFile('Videos', 'video1.mp4', $this->_testFilePath);
 	}
 
