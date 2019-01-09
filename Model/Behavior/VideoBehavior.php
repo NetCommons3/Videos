@@ -137,6 +137,8 @@ class VideoBehavior extends ModelBehavior {
  * @throws InternalErrorException
  */
 	public function saveConvertVideo(Model $model, $video) {
+		set_time_limit(3600);
+
 		// 元動画 取得
 		$noConvert = $model->UploadFile->getFile('videos', $model->id, Video::VIDEO_FILE_FIELD);
 
