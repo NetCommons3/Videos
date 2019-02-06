@@ -14,7 +14,7 @@ App::uses('TemporaryFolder', 'Files.Utility');
  * VideoTest Utility
  *
  * @author Mitsuru Mutaguchi <mutaguchi@opensource-workshop.jp>
- * @package NetCommons\CleanUp\Test\Case
+ * @package NetCommons\Videos\Test\Case
  */
 class VideoTestUtil {
 
