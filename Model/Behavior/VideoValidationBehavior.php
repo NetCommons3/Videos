@@ -106,7 +106,7 @@ class VideoValidationBehavior extends ModelBehavior {
 		if (in_array('add', $options, true)) {
 			// --- 登録時
 			if (!$isFfmpegEnable) {
-				$rules = Hash::merge($rules, array(
+				$rules = ValidateMerge::merge($rules, array(
 					// 必須
 					Video::THUMBNAIL_FIELD => array(
 						// http://book.cakephp.org/2.0/ja/models/data-validation.html#Validation::uploadError
@@ -129,7 +129,7 @@ class VideoValidationBehavior extends ModelBehavior {
 			}
 
 			// 必須
-			$rules = Hash::merge($rules, array(
+			$rules = ValidateMerge::merge($rules, array(
 				Video::VIDEO_FILE_FIELD => array(
 					'upload-file' => array(
 						'rule' => array('uploadError'),
@@ -148,7 +148,7 @@ class VideoValidationBehavior extends ModelBehavior {
 
 		} elseif (in_array('edit', $options, true)) {
 			// --- 編集時
-			$rules = Hash::merge($rules, array(
+			$rules = ValidateMerge::merge($rules, array(
 				// 任意
 				Video::VIDEO_FILE_FIELD => array(
 					'extension' => array(
@@ -184,7 +184,7 @@ class VideoValidationBehavior extends ModelBehavior {
  * @return array 初期ルール
  */
 	private function __initValidate(Model $model) {
-		return Hash::merge($model->validate, array(
+		return ValidateMerge::merge($model->validate, array(
 			'language_id' => array(
 				'numeric' => array(
 					'rule' => array('numeric'),
