@@ -63,7 +63,7 @@ class VideoGetConditionsTest extends WorkflowGetTest {
 		$methodName = $this->_methodName;
 
 		//データ生成
-		Current::$current['Permission']['content_readable']['value'] = '1';
+		Current::writePermission('2', 'content_readable', true);
 
 		//テスト実施
 		$result = $this->$model->$methodName();

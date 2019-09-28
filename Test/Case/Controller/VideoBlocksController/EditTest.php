@@ -74,7 +74,7 @@ class VideoBlocksControllerEditTest extends BlocksControllerEditTest {
 		$frameId = '6';
 		$frameKey = 'frame_3';
 		if ($isEdit) {
-			$blockId = '4';
+			$blockId = '2';
 			$blockKey = 'block_2';
 			$displayOrder = 'new';
 			$displayNumber = 5;
@@ -249,7 +249,7 @@ class VideoBlocksControllerEditTest extends BlocksControllerEditTest {
 		$this->_mockForReturnFalse('Videos.VideoSetting', 'deleteVideoSetting');
 
 		$frameId = '6';
-		$blockId = '4';
+		$blockId = '2';
 
 		//アクション実行
 		$url = NetCommonsUrl::actionUrl(array(

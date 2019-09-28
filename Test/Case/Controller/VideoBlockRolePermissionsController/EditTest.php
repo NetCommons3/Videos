@@ -68,7 +68,7 @@ class VideoBlockRolePermissionsControllerEditTest extends BlockRolePermissionsCo
  * @return array
  */
 	private function __data() {
-		$blockId = '4';
+		$blockId = '2';
 		$blockKey = 'block_2';
 		$blockName = 'Channel name';
 		$data = array(
@@ -145,7 +145,7 @@ class VideoBlockRolePermissionsControllerEditTest extends BlockRolePermissionsCo
 		$data['VideoSetting']['use_workflow'] = 'xxx';
 
 		$frameId = '6';
-		$blockId = '4';
+		$blockId = '2';
 		$blockKey = 'block_2';
 		$roomId = '2';
 		$permissions = $this->_getPermissionData(true, Hash::check($data, '{s}.use_comment_approval'));

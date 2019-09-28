@@ -38,7 +38,10 @@ class VideoFilesController extends Controller {
  * @var array
  */
 	public $components = array(
-		'Files.Download'
+		'Files.Download',
+		//Currentで必要なため、定義する
+		'Session',
+		'Auth',
 	);
 
 /**
@@ -50,7 +53,8 @@ class VideoFilesController extends Controller {
 		parent::beforeFilter();
 
 		// NetCommonsAppController(VideosAppController) を継承しないため、ここでカレントデータセット
-		Current::initialize($this);
+		$instance = Current::getInstance();
+		$instance->initialize($this);
 	}
 
 /**
