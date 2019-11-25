@@ -55,6 +55,9 @@ class VideoFilesController extends Controller {
 		// NetCommonsAppController(VideosAppController) を継承しないため、ここでカレントデータセット
 		$instance = Current::getInstance();
 		$instance->initialize($this);
+		// $componentsにAuthが設定されると、パブリックで公開された動画がログインしないと見れなくなるため、functionのfileを除外する
+		// @see https://github.com/NetCommons3/NetCommons3/issues/1540
+		$this->Auth->allow('file');
 	}
 
 /**
