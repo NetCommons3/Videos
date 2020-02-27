@@ -7,6 +7,7 @@
  *   - $isFfmpegEnable: Ffmpegを使うか
  *
  * @author Mitsuru Mutaguchi <mutaguchi@opensource-workshop.jp>
+ * @author Kazunori Sakamoto <exkazuu@willbooster.com>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
@@ -78,7 +79,10 @@ if (!isset($style)) {
 
 			<?php /* 再生回数 */ ?>
 			<span class="video-count-icons">
-				<span class="glyphicon glyphicon-play" aria-hidden="true"></span> <?php echo $video['Video']['play_number'] ?>
+				<span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+				<span id="<?php echo Current::read('Frame.id') . '-' . $video['Video']['id']; ?>-count">
+					<?php echo $nonCacheable ? $video['Video']['play_number'] : '-' ?>
+				</span>
 			</span>
 
 			<?php /* コメント数 */ ?>

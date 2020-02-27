@@ -4,6 +4,7 @@
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Mitsuru Mutaguchi <mutaguchi@opensource-workshop.jp>
+ * @author Kazunori Sakamoto <exkazuu@willbooster.com>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
@@ -113,15 +114,29 @@ echo $this->NetCommonsHtml->script('/videos/js/videos.js');
 		<div class="nc-not-found"><?php echo sprintf(__d('net_commons', '%s is not.'), __d('videos', 'Video')); ?></div>
 	<?php else : ?>
 		<?php /* 動画一覧 */ ?>
-		<?php foreach ($videos as $video) : ?>
-			<article>
-				<?php echo $this->element('Videos.Videos/list', array(
-					'video' => $video,
-					'videoSetting' => $videoSetting,
-					'isFfmpegEnable' => $isFfmpegEnable,
-				)); ?>
-			</article>
-		<?php endforeach; ?>
+		<?php
+			$nonCacheable = $this->response->header()['Pragma'] === 'no-cache' ||
+					strncmp('origin-', $_SERVER['SERVER_NAME'], 7) !== 0;
+			$videoIds = array();
+			if (! $nonCacheable) {
+				foreach ($videos as $video) {
+					$videoIds[] = $video['Video']['id'];
+				}
+			}
+		?>
+		<div ng-controller="Video.index"
+			ng-init="init(<?php echo Current::read('Frame.id') . ', ' . h(json_encode($videoIds)); ?>)">
+			<?php foreach ($videos as $video) : ?>
+				<article>
+					<?php echo $this->element('Videos.Videos/list', array(
+						'video' => $video,
+						'videoSetting' => $videoSetting,
+						'isFfmpegEnable' => $isFfmpegEnable,
+						'nonCacheable' => $nonCacheable,
+					)); ?>
+				</article>
+			<?php endforeach; ?>
+		</div>
 
 		<?php /* ページャ */ ?>
 		<?php echo $this->element('NetCommons.paginator'); ?>

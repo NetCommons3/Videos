@@ -4,6 +4,7 @@
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Mitsuru Mutaguchi <mutaguchi@opensource-workshop.jp>
+ * @author Kazunori Sakamoto <exkazuu@willbooster.com>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
@@ -17,6 +18,7 @@ App::uses('Video', 'Videos.Model');
  * Videos Controller
  *
  * @author Mitsuru Mutaguchi <mutaguchi@opensource-workshop.jp>
+ * @author Kazunori Sakamoto <exkazuu@willbooster.com>
  * @package NetCommons\Videos\Controller
  */
 class VideosController extends VideosAppController {
@@ -119,7 +121,7 @@ class VideosController extends VideosAppController {
 		}
 
 		// ゲストアクセスOKのアクションを設定
-		$this->Auth->allow('tag', 'embed');
+		$this->Auth->allow('tag', 'embed', 'get_play_counts');
 
 		// FFMPEG有効フラグ
 		/* @see VideoBehavior::isFfmpegEnable() */
@@ -334,6 +336,33 @@ class VideosController extends VideosAppController {
 	}
 
 /**
+ * ファイルのダウンロード数の取得
+ *
+ * @return void
+ */
+public function get_play_counts() {
+	$query = [
+		'fields' => [
+			'Video.id',
+			'Video.play_number',
+		],
+		'conditions' => [
+			'Video.id' => explode(',', $this->request->query('video_ids')),
+		]
+	];
+	$videos = $this->Video->find('all', $query);
+
+	if ($this->request->query('increment')) {
+		foreach ($videos as &$video) {
+			$video['Video']['play_number'] = $this->Video->countUp($video);
+		}
+	}
+
+	$this->set('_serialize', ['counts']);
+	$this->set('counts', $videos);
+}
+
+/**
  * _setFlashMessageAndRedirect
  *
  * @param string $contentKey コンテンツキー
@@ -352,7 +381,7 @@ class VideosController extends VideosAppController {
 			'key' => $contentKey
 		), true);
 		// 暫定対応：どうゆう訳だか、ここだと?frame_idが上記でセットされないので直書き
-		$url .= '?frame_id=' . Current::read('Frame.id');
+		$url .= '?frame_id=' . Current::read('Frame.id') . '&no-cache=1';
 		$this->redirect($url);
 	}
 

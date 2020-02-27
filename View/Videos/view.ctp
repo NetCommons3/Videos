@@ -4,6 +4,7 @@
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Mitsuru Mutaguchi <mutaguchi@opensource-workshop.jp>
+ * @author Kazunori Sakamoto <exkazuu@willbooster.com>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
@@ -59,7 +60,16 @@ echo $this->NetCommonsHtml->script(array(
 	)); ?>
 </div>
 
-<div class="video-margin-row" ng-controller="VideoView">
+<?php
+	$nonCacheable = $this->response->header()['Pragma'] === 'no-cache' ||
+			strncmp('origin-', $_SERVER['SERVER_NAME'], 7) !== 0;
+	$videoIds = array();
+	if (! $nonCacheable) {
+		$videoIds[] = $video['Video']['id'];
+	}
+?>
+<div class="video-margin-row" ng-controller="VideoView"
+	ng-init="init(<?php echo Current::read('Frame.id') . ', ' . h(json_encode($videoIds)); ?>)">
 	<div class="panel panel-default video-detail">
 		<div class="nc-content-list">
 			<?php /* ステータス、タイトル */ ?>
@@ -117,7 +127,10 @@ echo $this->NetCommonsHtml->script(array(
 
 			<?php /* 再生回数 */ ?>
 			<span class="video-count-icons">
-				<span class="glyphicon glyphicon-play" aria-hidden="true"></span> <?php echo $video['Video']['play_number'] ?>
+				<span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+				<span id="<?php echo Current::read('Frame.id') . '-' . $video['Video']['id']; ?>-count">
+					<?php echo $nonCacheable ? $video['Video']['play_number'] : '-' ?>
+				</span>
 			</span>
 
 			<?php /* いいね */ ?>

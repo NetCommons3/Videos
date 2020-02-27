@@ -1,30 +1,74 @@
 /**
  * @fileoverview Videos Javascript
  * @author mutaguchi@opensource-workshop.jp (Mitsuru Mutaguchi)
+ * @author exkazuu@willbooster.com (Kazunori Sakamoto)
  */
 
 
-/**
- * 動画詳細 Javascript
- *
- * @param {string} Controller name
- * @param {function($scope)} Controller
- */
-NetCommonsApp.controller('VideoView',
-    ['$scope', function($scope) {
+(function() {
+  /**
+   * 動画一覧 Javascript
+   *
+   * @param {string} Controller name
+   * @param {function($scope)} Controller
+   */
+  NetCommonsApp.controller('Video.index',
+      ['$scope', '$http', 'NC3_URL',
+        function($scope, $http, NC3_URL) {
+          $scope.init = function(frameId, videoIds) {
+            showPlayCounts($http, NC3_URL, frameId, videoIds, false);
+          };
+        }]
+  );
 
-      /**
-       * 埋め込みコード
-       *
-       * @return {void}
-       */
-      $scope.embed = function() {
-        // jquery 表示・非表示
-        $('div.video-embed').toggle('normal');
-        // 表示後埋め込みコード選択
-        $('input.video-embed-text').select();
-      };
-    }]);
+
+  /**
+   * 動画詳細 Javascript
+   *
+   * @param {string} Controller name
+   * @param {function($scope)} Controller
+   */
+  NetCommonsApp.controller('VideoView',
+    ['$scope', '$http', 'NC3_URL',
+      function($scope, $http, NC3_URL) {
+        $scope.init = function(frameId, videoIds) {
+          showPlayCounts($http, NC3_URL, frameId, videoIds, true);
+        };
+
+        /**
+         * 埋め込みコード
+         *
+         * @return {void}
+         */
+        $scope.embed = function() {
+          // jquery 表示・非表示
+          $('div.video-embed').toggle('normal');
+          // 表示後埋め込みコード選択
+          $('input.video-embed-text').select();
+        };
+      }]);
+
+  function showPlayCounts($http, NC3_URL, frameId, videoIds, increment) {
+    if (!videoIds || !videoIds.length) return;
+
+    var queryPrefix = '#' + frameId + '-';
+    var params = '?frame_id=' + frameId + '&video_ids=' + videoIds.join(',');
+    if (increment) {
+      params += '&increment=1';
+    }
+    $http.get(NC3_URL + '/videos/videos/get_play_counts.json' + params)
+    .then(
+      function(response) {
+        var counts = response.data.counts;
+        for (var i = 0; i < counts.length; i++) {
+          var $count = $(queryPrefix + counts[i].Video.id + '-count');
+          $count.text(counts[i].Video.play_number);
+        }
+      },
+      function() {
+      });
+  }
+})();
 
 
 /**
