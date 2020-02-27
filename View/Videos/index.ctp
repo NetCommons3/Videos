@@ -115,10 +115,8 @@ echo $this->NetCommonsHtml->script('/videos/js/videos.js');
 	<?php else : ?>
 		<?php /* 動画一覧 */ ?>
 		<?php
-			$nonCacheable = $this->response->header()['Pragma'] === 'no-cache' ||
-					strncmp('origin-', $_SERVER['SERVER_NAME'], 7) !== 0;
 			$videoIds = array();
-			if (! $nonCacheable) {
+			if ($this->CDNCache->isCacheable()) {
 				foreach ($videos as $video) {
 					$videoIds[] = $video['Video']['id'];
 				}
@@ -132,7 +130,6 @@ echo $this->NetCommonsHtml->script('/videos/js/videos.js');
 						'video' => $video,
 						'videoSetting' => $videoSetting,
 						'isFfmpegEnable' => $isFfmpegEnable,
-						'nonCacheable' => $nonCacheable,
 					)); ?>
 				</article>
 			<?php endforeach; ?>

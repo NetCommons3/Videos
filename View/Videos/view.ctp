@@ -61,10 +61,8 @@ echo $this->NetCommonsHtml->script(array(
 </div>
 
 <?php
-	$nonCacheable = $this->response->header()['Pragma'] === 'no-cache' ||
-			strncmp('origin-', $_SERVER['SERVER_NAME'], 7) !== 0;
 	$videoIds = array();
-	if (! $nonCacheable) {
+	if ($this->CDNCache->isCacheable()) {
 		$videoIds[] = $video['Video']['id'];
 	}
 ?>
@@ -129,7 +127,7 @@ echo $this->NetCommonsHtml->script(array(
 			<span class="video-count-icons">
 				<span class="glyphicon glyphicon-play" aria-hidden="true"></span>
 				<span id="<?php echo Current::read('Frame.id') . '-' . $video['Video']['id']; ?>-count">
-					<?php echo $nonCacheable ? $video['Video']['play_number'] : '-' ?>
+					<?php echo $this->CDNCache->isCacheable() ? '-' : $video['Video']['play_number']; ?>
 				</span>
 			</span>
 
