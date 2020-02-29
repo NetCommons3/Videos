@@ -115,15 +115,16 @@ echo $this->NetCommonsHtml->script('/videos/js/videos.js');
 	<?php else : ?>
 		<?php /* 動画一覧 */ ?>
 		<?php
-			$videoIds = array();
-			if ($this->CDNCache->isCacheable()) {
-				foreach ($videos as $video) {
-					$videoIds[] = $video['Video']['id'];
-				}
+			$initialValues = array();
+			$cacheable = $this->CDNCache->isCacheable();
+			foreach ($videos as $video) {
+				$value = $cacheable ? null : $video['Video']['play_number'];
+				$initialValues[$video['Video']['id']] = $value;
 			}
 		?>
 		<div ng-controller="Video.index"
-			ng-init="init(<?php echo Current::read('Frame.id') . ', ' . h(json_encode($videoIds)); ?>)">
+			ng-init="init(<?php echo h(json_encode(Current::read('Frame.id'))
+				. ', ' . h(json_encode($initialValues)); ?>)">
 			<?php foreach ($videos as $video) : ?>
 				<article>
 					<?php echo $this->element('Videos.Videos/list', array(

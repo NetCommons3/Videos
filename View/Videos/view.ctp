@@ -61,13 +61,14 @@ echo $this->NetCommonsHtml->script(array(
 </div>
 
 <?php
-	$videoIds = array();
-	if ($this->CDNCache->isCacheable()) {
-		$videoIds[] = $video['Video']['id'];
-	}
+	$initialValues = array();
+	$cacheable = $this->CDNCache->isCacheable();
+	$value = $cacheable ? null : $video['Video']['play_number'];
+	$initialValues[$video['Video']['id']] = $value;
 ?>
 <div class="video-margin-row" ng-controller="VideoView"
-	ng-init="init(<?php echo Current::read('Frame.id') . ', ' . h(json_encode($videoIds)); ?>)">
+	ng-init="init(<?php echo h(json_encode(Current::read('Frame.id')))
+		. ', ' . h(json_encode($initialValues)); ?>)">
 	<div class="panel panel-default video-detail">
 		<div class="nc-content-list">
 			<?php /* ステータス、タイトル */ ?>
@@ -126,9 +127,7 @@ echo $this->NetCommonsHtml->script(array(
 			<?php /* 再生回数 */ ?>
 			<span class="video-count-icons">
 				<span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-				<span id="<?php echo Current::read('Frame.id') . '-' . $video['Video']['id']; ?>-count">
-					<?php echo $this->CDNCache->isCacheable() ? '-' : $video['Video']['play_number']; ?>
-				</span>
+				{{playCounts[<?php echo h(json_encode($video['Video']['id'])); ?>]}}
 			</span>
 
 			<?php /* いいね */ ?>

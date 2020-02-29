@@ -80,9 +80,7 @@ if (!isset($style)) {
 			<?php /* 再生回数 */ ?>
 			<span class="video-count-icons">
 				<span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-				<span id="<?php echo Current::read('Frame.id') . '-' . $video['Video']['id']; ?>-count">
-					<?php echo $this->CDNCache->isCacheable() ? '-' : $video['Video']['play_number']; ?>
-				</span>
+				{{playCounts[<?php echo h(json_encode($video['Video']['id'])); ?>]}}
 			</span>
 
 			<?php /* コメント数 */ ?>

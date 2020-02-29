@@ -31,8 +31,8 @@
   NetCommonsApp.controller('VideoView',
     ['$scope', '$http', 'NC3_URL',
       function($scope, $http, NC3_URL) {
-        $scope.init = function(frameId, videoIds) {
-          showPlayCounts($http, NC3_URL, frameId, videoIds, true);
+        $scope.init = function(frameId, initialValues) {
+          showPlayCounts($http, NC3_URL, frameId, initialValues, true);
         };
 
         /**
@@ -48,10 +48,16 @@
         };
       }]);
 
-  function showPlayCounts($http, NC3_URL, frameId, videoIds, increment) {
+  function showPlayCounts($http, NC3_URL, frameId, initialValues, increment) {
+    var videoIds = initialValues && Object.keys(initialValues);
     if (!videoIds || !videoIds.length) return;
 
-    var queryPrefix = '#' + frameId + '-';
+    $scope.playCounts = initialValues;
+    if (initialValues[videoIds[0]] !== null) return;
+    for (var i = 0; i < videoIds.length; i++) {
+      initialValues[videoIds[i]] = '-';
+    }
+
     var params = '?frame_id=' + frameId + '&video_ids=' + videoIds.join(',');
     if (increment) {
       params += '&increment=1';
@@ -61,8 +67,7 @@
       function(response) {
         var counts = response.data.counts;
         for (var i = 0; i < counts.length; i++) {
-          var $count = $(queryPrefix + counts[i].Video.id + '-count');
-          $count.text(counts[i].Video.play_number);
+          $scope.playCounts[counts[i].Video.id] = counts[i].Video.play_number;
         }
       },
       function() {
