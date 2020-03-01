@@ -10,13 +10,13 @@
    * 動画一覧 Javascript
    *
    * @param {string} Controller name
-   * @param {function($scope)} Controller
+   * @param {function($scope, $http, NC3_URL)} Controller
    */
   NetCommonsApp.controller('Video.index',
       ['$scope', '$http', 'NC3_URL',
         function($scope, $http, NC3_URL) {
           $scope.init = function(frameId, videoIds) {
-            showPlayCounts($http, NC3_URL, frameId, videoIds, false);
+            showPlayCounts($scope, $http, NC3_URL, frameId, videoIds, false);
           };
         }]
   );
@@ -26,13 +26,13 @@
    * 動画詳細 Javascript
    *
    * @param {string} Controller name
-   * @param {function($scope)} Controller
+   * @param {function($scope, $http, NC3_URL)} Controller
    */
   NetCommonsApp.controller('VideoView',
     ['$scope', '$http', 'NC3_URL',
       function($scope, $http, NC3_URL) {
         $scope.init = function(frameId, initialValues) {
-          showPlayCounts($http, NC3_URL, frameId, initialValues, true);
+          showPlayCounts($scope, $http, NC3_URL, frameId, initialValues, true);
         };
 
         /**
@@ -48,7 +48,7 @@
         };
       }]);
 
-  function showPlayCounts($http, NC3_URL, frameId, initialValues, increment) {
+  function showPlayCounts($scope, $http, NC3_URL, frameId, initialValues, increment) {
     var videoIds = initialValues && Object.keys(initialValues);
     if (!videoIds || !videoIds.length) return;
 

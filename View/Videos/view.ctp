@@ -67,8 +67,8 @@ echo $this->NetCommonsHtml->script(array(
 	$initialValues[$video['Video']['id']] = $value;
 ?>
 <div class="video-margin-row" ng-controller="VideoView"
-	ng-init="init(<?php echo h(json_encode(Current::read('Frame.id')))
-		. ', ' . h(json_encode($initialValues)); ?>)">
+	 ng-init="init(<?php echo h(json_encode(Current::read('Frame.id')))
+		 . ', ' . h(json_encode($initialValues)); ?>)">
 	<div class="panel panel-default video-detail">
 		<div class="nc-content-list">
 			<?php /* ステータス、タイトル */ ?>
@@ -162,19 +162,30 @@ echo $this->NetCommonsHtml->script(array(
 <?php /* 関連動画 */ ?>
 <div class="video-margin-row">
 	<div id="nc-related-videos-<?php echo Current::read('Frame.id'); ?>" ng-controller="RelatedVideos">
+		<?php
+		$initialValues = array();
+		foreach ($relatedVideos as $video) {
+			$value = $cacheable ? null : $video['Video']['play_number'];
+			$initialValues[$video['Video']['id']] = $value;
+		}
+		?>
 		<?php $i = 0; ?>
-		<?php foreach ($relatedVideos as $relatedVideo) : ?>
-			<?php /* related-videoはJSで必要 */ ?>
-			<article class="related-video <?php echo $i >= VideosController::START_LIMIT_RELATED_VIDEO ? 'hidden' : '' ?>">
-				<?php echo $this->element('Videos.Videos/list', array(
-					"video" => $relatedVideo,
-					"style" => 'panel panel-default',
-					"videoSetting" => $videoSetting,
-					"isFfmpegEnable" => $isFfmpegEnable,
-				)); ?>
-			</article>
-			<?php $i++; ?>
-		<?php endforeach; ?>
+		<div ng-controller="Video.index"
+			 ng-init="init(<?php echo h(json_encode(Current::read('Frame.id')))
+				 . ', ' . h(json_encode($initialValues)); ?>)">
+			<?php foreach ($relatedVideos as $relatedVideo) : ?>
+				<?php /* related-videoはJSで必要 */ ?>
+				<article class="related-video <?php echo $i >= VideosController::START_LIMIT_RELATED_VIDEO ? 'hidden' : '' ?>">
+					<?php echo $this->element('Videos.Videos/list', array(
+						"video" => $relatedVideo,
+						"style" => 'panel panel-default',
+						"videoSetting" => $videoSetting,
+						"isFfmpegEnable" => $isFfmpegEnable,
+					)); ?>
+				</article>
+				<?php $i++; ?>
+			<?php endforeach; ?>
+		</div>
 
 		<?php /* もっと見る */ ?>
 		<?php
