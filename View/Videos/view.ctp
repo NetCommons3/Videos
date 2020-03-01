@@ -125,7 +125,7 @@ echo $this->NetCommonsHtml->script(array(
 			</span>
 
 			<?php /* 再生回数 */ ?>
-			<span class="video-count-icons">
+			<span class="video-count-icons" ng-cloak>
 				<span class="glyphicon glyphicon-play" aria-hidden="true"></span>
 				{{playCounts[<?php echo h(json_encode($video['Video']['id'])); ?>]}}
 			</span>
