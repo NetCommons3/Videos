@@ -357,6 +357,7 @@ public function get_play_counts() {
 		foreach ($videos as &$video) {
 			$video['Video']['play_number'] = $this->Video->countUp($video);
 		}
+		unset($video);
 	}
 
 	$this->set('_serialize', ['counts']);
