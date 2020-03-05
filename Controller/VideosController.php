@@ -349,9 +349,12 @@ public function get_play_counts() {
 		'conditions' => [
 			'Video.id' => explode(',', $this->request->query('video_ids')),
 		],
-		'recursive' => -1
+		'recursive' => -1,
 	];
+	$orgRecursive = $this->Video->recursive;
+	$this->Video->recursive = -1;
 	$videos = $this->Video->find('all', $query);
+	$this->Video->recursive = $orgRecursive;
 
 	if ($this->request->query('increment')) {
 		foreach ($videos as &$video) {
