@@ -87,7 +87,7 @@ if (!isset($style)) {
 			<?php echo $this->ContentComment->count($video, array('class' => 'video-count-icons')); ?>
 
 			<?php /* いいね数 */ ?>
-			<?php echo $this->Like->display($videoSetting, $video); ?>
+			<?php echo $this->Like->display('Video', $videoSetting, $video); ?>
 		</div>
 	</div>
 </div>
