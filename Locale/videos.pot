@@ -148,3 +148,5 @@ msgstr ""
 msgid "Please register if you want to change."
 msgstr ""
 
+msgid "Maximum upload size: %s"
+msgstr ""
