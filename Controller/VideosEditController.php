@@ -66,6 +66,17 @@ class VideosEditController extends VideosAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 
+		// bugfix: post_max_size を超えると $_POSTが空っぽになり(php標準の動き)、postした値とサーバ側で受け取った値がずれて予期しないトークンエラー対応
+		// post & $_FILESが空 & add|editアクションのみ、セキュリティコンポーネントを除外
+		//   補足1: 除外すると、FileUploadComponent::startup()で、「post_max_size を超えると $_POSTが空っぽ」でエラーメッセージを表示してくれる。
+		//   補足2: 登録前にアップロード空チェックは、バリデーションで必須チェックしているため、empty($_FILES)を通しても問題なし
+		//   補足3: post_max_sizeを超えなければ$_FILESの値は消えない & upload_max_filesizeを超えた場合は、バリデーションのuploadErrorでチェックしているため、問題なし
+		//   補足4: $this->NetCommonsForm->unlockField(Video::VIDEO_FILE_FIELD);指定、$this->Security->csrfCheck = false;を指定しても「予期しないトークンエラー」となったため、$this->Security->unlockedActionsを使用
+		$unlockedActions = ['add', 'edit'];
+		if ($this->request->is('post') && empty($_FILES) && in_array($this->action, $unlockedActions)) {
+			$this->Security->unlockedActions = $unlockedActions;
+		}
+
 		// ブロック未選択は、何も表示しない
 		if (! Current::read('Block.id')) {
 			$this->setAction('emptyRender');
