@@ -48,11 +48,12 @@ $video = NetCommonsAppController::camelizeKeyRecursive(array('video' => $this->d
 				} else {
 					$videoHelpBlockMessage = sprintf(__d('videos', 'support of %s.'), 'mp4');
 				}
+				$videoHelpBlockMessage .=  '<br>' . sprintf(__d('videos', 'Maximum upload size: %s'), ini_get('upload_max_filesize'));
 				?>
 				<?php echo $this->NetCommonsForm->uploadFile(Video::VIDEO_FILE_FIELD, array(
 					'label' => __d('videos', 'Video file'),
 					'required' => true,
-					'help' => h($videoHelpBlockMessage),
+					'help' => $videoHelpBlockMessage,
 				)); ?>
 
 				<?php /* ffmpeg=OFF */ ?>

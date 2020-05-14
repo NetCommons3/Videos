@@ -4,14 +4,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"PO-Revision-Date: 2016-08-12 14:04+0900\n"
+"PO-Revision-Date: 2020-04-18 12:22+0900\n"
 "Language-Team: EMAIL@ADDRESS\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "POT-Creation-Date: \n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 2.3\n"
 "Last-Translator: \n"
 "Language: en\n"
 
@@ -137,3 +137,6 @@ msgstr "Number"
 
 msgid "All videos"
 msgstr "All videos"
+
+msgid "Maximum upload size: %s"
+msgstr "Maximum upload size: %s"
