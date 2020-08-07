@@ -12,7 +12,7 @@ dist: trusty
 
 env:
   matrix:
-    - NETCOMMONS_VERSION=master DB=mysql
+    - NETCOMMONS_VERSION=availability DB=mysql
   global:
     - secure: "ETR0GRqjEv6OAGGpr0eNQ2mCdPFLVV4ppmU6cDbGdHyfr1a/SVA2Do75gDx/qwjf9FAXb0qNPypCU7CIJ6L+U2yVpn65qbAZ5fgKLk2xA8xjkfrn2W5Fcif7kxusvqJyYXmq1mhIBkZdNQjwfJPsSO5zZjGUeqv/cBUz5lvfa/I="
     - GIT_COMMITTER_NAME=akagane99
