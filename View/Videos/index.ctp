@@ -123,8 +123,8 @@ echo $this->NetCommonsHtml->script('/videos/js/videos.js');
 			}
 		?>
 		<div ng-controller="Video.index"
-			ng-init="init(<?php echo h(json_encode(Current::read('Frame.id')))
-				. ', ' . h(json_encode($initialValues)); ?>)">
+			ng-init="init(<?php echo h(json_encode(Current::read('Frame.id'))) .
+					', ' . h(json_encode($initialValues)); ?>)">
 			<?php foreach ($videos as $video) : ?>
 				<article>
 					<?php echo $this->element('Videos.Videos/list', array(

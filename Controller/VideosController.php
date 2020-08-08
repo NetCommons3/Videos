@@ -340,32 +340,32 @@ class VideosController extends VideosAppController {
  *
  * @return void
  */
-public function get_play_counts() {
-	$query = [
-		'fields' => [
-			'Video.id',
-			'Video.play_number',
-		],
-		'conditions' => [
-			'Video.id' => explode(',', $this->request->query('video_ids')),
-		],
-		'recursive' => -1,
-	];
-	$orgRecursive = $this->Video->recursive;
-	$this->Video->recursive = -1;
-	$videos = $this->Video->find('all', $query);
-	$this->Video->recursive = $orgRecursive;
+	public function get_play_counts() {
+		$query = [
+			'fields' => [
+				'Video.id',
+				'Video.play_number',
+			],
+			'conditions' => [
+				'Video.id' => explode(',', $this->request->query('video_ids')),
+			],
+			'recursive' => -1,
+		];
+		$orgRecursive = $this->Video->recursive;
+		$this->Video->recursive = -1;
+		$videos = $this->Video->find('all', $query);
+		$this->Video->recursive = $orgRecursive;
 
-	if ($this->request->query('increment')) {
-		foreach ($videos as &$video) {
-			$video['Video']['play_number'] = $this->Video->countUp($video);
+		if ($this->request->query('increment')) {
+			foreach ($videos as &$video) {
+				$video['Video']['play_number'] = $this->Video->countUp($video);
+			}
+			unset($video);
 		}
-		unset($video);
-	}
 
-	$this->set('_serialize', ['counts']);
-	$this->set('counts', $videos);
-}
+		$this->set('_serialize', ['counts']);
+		$this->set('counts', $videos);
+	}
 
 /**
  * _setFlashMessageAndRedirect

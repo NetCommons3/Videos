@@ -67,8 +67,8 @@ echo $this->NetCommonsHtml->script(array(
 	$initialValues[$video['Video']['id']] = $value;
 ?>
 <div class="video-margin-row" ng-controller="VideoView"
-	 ng-init="init(<?php echo h(json_encode(Current::read('Frame.id')))
-		 . ', ' . h(json_encode($initialValues)); ?>)">
+	 ng-init="init(<?php echo h(json_encode(Current::read('Frame.id'))) .
+			', ' . h(json_encode($initialValues)); ?>)">
 	<div class="panel panel-default video-detail">
 		<div class="nc-content-list">
 			<?php /* ステータス、タイトル */ ?>
@@ -171,8 +171,8 @@ echo $this->NetCommonsHtml->script(array(
 		?>
 		<?php $i = 0; ?>
 		<div ng-controller="Video.index"
-			 ng-init="init(<?php echo h(json_encode(Current::read('Frame.id')))
-				 . ', ' . h(json_encode($initialValues)); ?>)">
+			 ng-init="init(<?php echo h(json_encode(Current::read('Frame.id'))) .
+					', ' . h(json_encode($initialValues)); ?>)">
 			<?php foreach ($relatedVideos as $relatedVideo) : ?>
 				<?php /* related-videoはJSで必要 */ ?>
 				<article class="related-video <?php echo $i >= VideosController::START_LIMIT_RELATED_VIDEO ? 'hidden' : '' ?>">

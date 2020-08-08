@@ -29,24 +29,24 @@
    * @param {function($scope, $http, NC3_URL)} Controller
    */
   NetCommonsApp.controller('VideoView',
-    ['$scope', '$http', 'NC3_URL',
-      function($scope, $http, NC3_URL) {
-        $scope.init = function(frameId, initialValues) {
-          showPlayCounts($scope, $http, NC3_URL, frameId, initialValues, true);
-        };
+      ['$scope', '$http', 'NC3_URL',
+        function($scope, $http, NC3_URL) {
+          $scope.init = function(frameId, initialValues) {
+            showPlayCounts($scope, $http, NC3_URL, frameId, initialValues, true);
+          };
 
-        /**
-         * 埋め込みコード
-         *
-         * @return {void}
-         */
-        $scope.embed = function() {
-          // jquery 表示・非表示
-          $('div.video-embed').toggle('normal');
-          // 表示後埋め込みコード選択
-          $('input.video-embed-text').select();
-        };
-      }]);
+          /**
+           * 埋め込みコード
+           *
+           * @return {void}
+           */
+          $scope.embed = function() {
+            // jquery 表示・非表示
+            $('div.video-embed').toggle('normal');
+            // 表示後埋め込みコード選択
+            $('input.video-embed-text').select();
+          };
+        }]);
 
   function showPlayCounts($scope, $http, NC3_URL, frameId, initialValues, increment) {
     var videoIds = initialValues && Object.keys(initialValues);
@@ -63,15 +63,15 @@
       params += '&increment=1';
     }
     $http.get(NC3_URL + '/videos/videos/get_play_counts.json' + params)
-    .then(
-      function(response) {
-        var counts = response.data.counts;
-        for (var i = 0; i < counts.length; i++) {
-          $scope.playCounts[counts[i].Video.id] = counts[i].Video.play_number;
-        }
-      },
-      function() {
-      });
+        .then(
+        function(response) {
+          var counts = response.data.counts;
+          for (var i = 0; i < counts.length; i++) {
+            $scope.playCounts[counts[i].Video.id] = counts[i].Video.play_number;
+          }
+        },
+        function() {
+        });
   }
 })();
 
