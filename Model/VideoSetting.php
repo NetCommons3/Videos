@@ -280,7 +280,7 @@ class VideoSetting extends VideosAppModel {
 			}
 
 			// アップロードファイル 削除
-			$this->__deleteAll($this->UploadFile, 'content_key', $contentKeys);
+			$this->__deleteAll($this->UploadFile, 'content_key', $contentKeys, true);
 
 			// タグコンテンツ 削除
 			$this->__deleteAll($this->TagsContent, 'tag_id', $tagIds);
@@ -344,16 +344,17 @@ class VideoSetting extends VideosAppModel {
  * @param Model $model モデル
  * @param string $filed フィールド名
  * @param string $value 値
+ * @param bool $callBackFlag callBack実行
  * @return void
  * @throws InternalErrorException
  */
-	private function __deleteAll(Model $model, $filed, $value) {
+	private function __deleteAll(Model $model, $filed, $value, $callBackFlag = false) {
 		if (empty($value)) {
 			return;
 		}
 
 		$conditions = array($model->alias . '.' . $filed => $value);
-		if (! $model->deleteAll($conditions, false)) {
+		if (! $model->deleteAll($conditions, false, $callBackFlag)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 	}
