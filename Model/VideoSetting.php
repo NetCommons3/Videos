@@ -347,6 +347,7 @@ class VideoSetting extends VideosAppModel {
  * @param bool $callBackFlag callBack実行
  * @return void
  * @throws InternalErrorException
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
  */
 	private function __deleteAll(Model $model, $filed, $value, $callBackFlag = false) {
 		if (empty($value)) {
