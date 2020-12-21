@@ -380,7 +380,7 @@ class Video extends VideosAppModel {
 
 			// アップロードファイル 削除
 			$conditions = array($this->UploadFile->alias . '.content_key' => $data['Video']['key']);
-			if (! $this->UploadFile->deleteAll($conditions, false)) {
+			if (! $this->UploadFile->deleteAll($conditions, false, true)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
