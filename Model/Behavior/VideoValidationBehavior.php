@@ -172,6 +172,14 @@ class VideoValidationBehavior extends ModelBehavior {
 					),
 				),
 			));
+
+			//NC2からNC3で移行するとサムネイルが移行されないため、サムネイルのupload_idが空であれば、
+			//エラーにならないようにunsetする。
+			//@see https://github.com/NetCommons3/NetCommons3/issues/1617
+			if (isset($model->data['UploadFile']['thumbnail']['id']) &&
+					! $model->data['UploadFile']['thumbnail']['id']) {
+				unset($model->data['UploadFile']['thumbnail']);
+			}
 		}
 
 		return $rules;
