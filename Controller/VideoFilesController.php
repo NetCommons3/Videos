@@ -80,7 +80,23 @@ class VideoFilesController extends Controller {
 
 		// ダウンロード実行
 		if ($video) {
-			return $this->Download->doDownload($video['Video']['id']);
+			//NC2からNC3で移行するとサムネイルが移行されないため、サムネイル画像がないときはNoImageを表示させる
+			//@see https://github.com/NetCommons3/NetCommons3/issues/1617
+			try {
+				$response = $this->Download->doDownload($video['Video']['id']);
+			} catch (Exception $ex) {
+				if (!empty($this->request->params['pass']) &&
+						$this->request->params['pass'][0] === Video::THUMBNAIL_FIELD) {
+					//NoImageを表示する
+					$noimagePath = CakePlugin::path('Videos') .
+							'webroot' . DS . 'img' . DS . 'thumbnail_noimage.png';
+					$this->response->file($noimagePath, ['name' => 'No Image']);
+					$response = $this->response;
+				} else {
+					throw $ex;
+				}
+			}
+			return $response;
 		} else {
 			// 表示できないなら404
 			throw new NotFoundException(__d('videos', 'Invalid video entry'));
