@@ -103,7 +103,7 @@ $video = NetCommonsAppController::camelizeKeyRecursive(array('video' => $this->d
 				'key' => $this->request->data('Video.key')
 			))); ?>
 
-		<?php echo $this->Form->end(); ?>
+		<?php echo $this->NetCommonsForm->end(); ?>
 
 		<?php if ($this->Workflow->canDelete('Videos.Video', $this->request->data('Video'))) : ?>
 			<div class="panel-footer">
