@@ -27,6 +27,10 @@ class VideoSettingSaveVideoSettingTest extends NetCommonsSaveTest {
  */
 	public $fixtures = array(
 		'plugin.videos.video_setting',
+		'plugin.videos.video',
+		'plugin.categories.category',
+		'plugin.categories.category_order',
+		'plugin.categories.categories_language',
 	);
 
 /**
