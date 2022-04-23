@@ -11,6 +11,7 @@
 
 App::uses('Controller', 'Controller');
 App::uses('Current', 'NetCommons.Utility');
+App::uses('NetCommonsSecurity', 'NetCommons.Utility');
 
 /**
  * サムネイル、動画の表示 Controller
@@ -67,6 +68,10 @@ class VideoFilesController extends Controller {
  * @throws NotFoundException 表示できない記事へのアクセス
  */
 	public function file() {
+		if (! (new NetCommonsSecurity())->enableBadIps()) {
+			throw new NotFoundException();
+		}
+
 		// ここから元コンテンツを取得する処理
 		$key = $this->params['key'];
 		$conditions = $this->Video->getConditions();
@@ -99,7 +104,7 @@ class VideoFilesController extends Controller {
 			return $response;
 		} else {
 			// 表示できないなら404
-			throw new NotFoundException(__d('videos', 'Invalid video entry'));
+			throw new NotFoundException();
 		}
 	}
 }
