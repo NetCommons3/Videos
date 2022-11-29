@@ -138,6 +138,9 @@ class VideosEditController extends VideosAppController {
 				'Video.key' => $videoKey
 			)
 		));
+		if (empty($video)) {
+			return $this->throwBadRequest();
+		}
 		$this->set('video', $video);
 
 		if (! $this->Video->canEditWorkflowContent($video)) {
